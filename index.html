@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Federal Compliance & Sanctions Screening</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef2f7;
+}
+
+.header{
+background:#1f3c88;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+}
+
+.container{
+width:800px;
+margin:auto;
+background:white;
+margin-top:30px;
+padding:30px;
+border-radius:8px;
+box-shadow:0px 0px 10px gray;
+}
+
+.section{
+margin-top:20px;
+}
+
+label{
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:8px;
+margin-top:5px;
+margin-bottom:10px;
+border:1px solid #ccc;
+border-radius:4px;
+}
+
+button{
+background:#c0392b;
+color:white;
+padding:12px;
+border:none;
+border-radius:5px;
+width:100%;
+font-size:16px;
+}
+
+.result{
+margin-top:20px;
+padding:15px;
+background:#f4f6f7;
+border-left:5px solid #2c3e50;
+}
+
+.table{
+width:100%;
+margin-top:15px;
+border-collapse:collapse;
+}
+
+.table th{
+background:#2c3e50;
+color:white;
+padding:8px;
+}
+
+.table td{
+border:1px solid #ddd;
+padding:8px;
+}
+
+.statusClear{
+color:green;
+font-weight:bold;
+}
+
+.statusReview{
+color:orange;
+font-weight:bold;
+}
+
+.statusBlocked{
+color:red;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+Federal Regulatory Compliance Screening System
+</div>
+
+<div class="container">
+
+<div class="section">
+
+<h3>Customer Screening</h3>
+
+<label>Customer Name</label>
+<input id="name">
+
+<label>SSN</label>
+<input id="ssn">
+
+<label>Loan Application ID</label>
+<input id="loanid">
+
+<button onclick="runCheck()">Run Compliance Screening</button>
+
+</div>
+
+<div id="result" class="result"></div>
+
+</div>
+
+<script>
+
+function runCheck(){
+
+var ssn=document.getElementById("ssn").value
+var name=document.getElementById("name").value
+var loan=document.getElementById("loanid").value
+
+var status="CLEAR"
+var risk="LOW"
+var watchlist="No Match"
+var score=20
+
+/* Deterministic SSN rules */
+
+if(ssn=="789456123"){
+status="CLEAR"
+risk="LOW"
+watchlist="No Match"
+score=18
+}
+
+else if(ssn=="987654123"){
+status="CLEAR"
+risk="LOW"
+watchlist="No Match"
+score=22
+}
+
+else if(ssn=="789456123"){
+status="REVIEW"
+risk="MEDIUM"
+watchlist="Possible Name Match"
+score=58
+}
+
+
+else if(ssn=="HBXYH5454Z"){
+status="REVIEW"
+risk="MEDIUM"
+watchlist="Possible Name Match"
+score=58
+}
+
+else if(ssn=="321654987"){
+status="CLEAR"
+risk="LOW"
+watchlist="No Match"
+score=25
+}
+
+else if(ssn=="985455689"){
+status="BLOCKED"
+risk="HIGH"
+watchlist="Sanctions List Match"
+score=92
+}
+
+else{
+status="REVIEW"
+risk="MEDIUM"
+watchlist="Unknown"
+score=60
+}
+
+/* status color */
+
+var statusClass="statusClear"
+
+if(status=="REVIEW"){
+statusClass="statusReview"
+}
+
+if(status=="BLOCKED"){
+statusClass="statusBlocked"
+}
+
+/* timestamp */
+
+var date=new Date()
+
+document.getElementById("result").innerHTML=
+
+"<h3>Screening Results</h3>"+
+
+"<table class='table'>"+
+"<tr><th>Field</th><th>Result</th></tr>"+
+
+"<tr><td>Loan Application</td><td>"+loan+"</td></tr>"+
+"<tr><td>Customer Name</td><td>"+name+"</td></tr>"+
+"<tr><td>SSN</td><td>"+ssn+"</td></tr>"+
+"<tr><td>OFAC / Sanctions Check</td><td>"+watchlist+"</td></tr>"+
+"<tr><td>Fraud Risk Score</td><td>"+score+"</td></tr>"+
+"<tr><td>Risk Level</td><td>"+risk+"</td></tr>"+
+"<tr><td>Compliance Decision</td><td class='"+statusClass+"'>"+status+"</td></tr>"+
+"<tr><td>Screening Time</td><td>"+date.toLocaleString()+"</td></tr>"+
+
+"</table>"
+
+}
+
+</script>
+
+</body>
+</html>
